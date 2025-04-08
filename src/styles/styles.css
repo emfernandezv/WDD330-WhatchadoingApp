@@ -1,0 +1,131 @@
+/* styles.css */
+
+:root {
+  --bg: #fff8f0;
+  --primary: #ff9966;
+  --secondary: #ffcc99;
+  --text: #3e2c1c;
+  --accent: #d46a6a;
+  --highlight: #fff2e6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+nav {
+  background-color: var(--primary);
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+nav a {
+  margin: 0 1rem;
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+header {
+  background-color: var(--secondary);
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  border-bottom: 4px solid var(--primary);
+}
+
+header h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: 2rem;
+}
+
+#app, main, section {
+  max-width: 900px;
+  margin: auto;
+  padding: 1rem;
+}
+
+input, button {
+  padding: 0.75rem 1rem;
+  margin: 0.5rem 0.3rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+input {
+  width: 100%;
+  max-width: 300px;
+  background-color: #fff;
+  color: var(--text);
+}
+
+button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--accent);
+}
+
+.event-item {
+  background-color: var(--highlight);
+  border-left: 5px solid var(--accent);
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.event-item:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.weather-card {
+  display: none;
+  background-color: var(--highlight);
+  border-left: 5px solid var(--accent);
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.weather-card.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h2, h3, h4 {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+#login-status {
+  color: red;
+  font-weight: bold;
+}
