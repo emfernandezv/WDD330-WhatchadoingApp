@@ -43,8 +43,8 @@ export async function searchEvents() {
         <p>${locationName}</p>
         <p>${dateTime}</p>
         <button onclick="showWeather('${locationName}', '${dateTime}', '${weatherId}', this)">Check Weather</button>
-        <button onclick='confirmSaveEvent(${JSON.stringify({ title, address: locationName, date: dateTime })})'>Save Event</button>
-        <div id="${weatherId}" class="weather-card"></div>
+       <button onclick='confirmSaveEvent(${JSON.stringify({ title, address: locationName, date: dateTime })}, this)'>Save Event</button>
+              <div id="${weatherId}" class="weather-card"></div>
       `;
       eventsContainer.appendChild(eventEl);
     });

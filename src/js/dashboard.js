@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     nav.innerHTML = `
       <a href='/index.html'>Dashboard</a> |
       <a href='/plans.html'>My Plans</a> |
-      <a href='/login.html'>Login</a>
+      <a id='login-btn' href='/login.html'>Login</a>
     `;
     document.body.insertBefore(nav, document.body.firstChild);
   
@@ -19,5 +19,13 @@ document.addEventListener("DOMContentLoaded", () => {
         searchInput.focus();
         searchInput.setAttribute("autocomplete", "on");
       }
+    }
+  });
+
+  window.addEventListener("DOMContentLoaded", () => {
+    const loginBtn = document.getElementById("login-btn");
+    if (loginBtn) {
+      const user = localStorage.getItem("loggedUser");
+      if (user) loginBtn.style.display = "none";
     }
   });

@@ -1,60 +1,105 @@
 // plans-handler.mjs
-export function confirmSaveEvent(eventData) {
-    const user = JSON.parse(localStorage.getItem("loggedUser"));
-    if (!user) {
-      alert("You need to log in to save events.");
-      localStorage.setItem("pendingEvent", JSON.stringify(eventData));
-      window.location.href = "/login.html";
-      return;
+import { showToast, getSavedPlans, savePlans, getLoggedUser } from "./utility.js";
+
+export function confirmSaveEvent(eventData, btnRef) {
+  const user = getLoggedUser();
+  if (!user) {
+    showToast("You need to log in to save events.", "error");
+    localStorage.setItem("pendingEvent", JSON.stringify(eventData));
+    window.location.href = "/login.html";
+    return;
+  }
+
+  const saved = getSavedPlans(user.email);
+  const alreadySaved = saved.some(plan => plan.name === (eventData.title || eventData.name) && plan.date === eventData.date);
+  if (alreadySaved) {
+    showToast("This event is already in your plans.", "info");
+    if (btnRef) {
+      btnRef.disabled = true;
+      btnRef.textContent = "SAVED";
     }
-    saveEvent(eventData);
+    return;
   }
-  
-  export function saveEvent(eventData) {
-    const user = JSON.parse(localStorage.getItem("loggedUser"));
-    if (!user) return;
-  
-    let saved = JSON.parse(localStorage.getItem(`plans_${user.email}`)) || [];
-    saved.push({
-      id: Date.now(),
-      name: eventData.name.text,
-      date: eventData.start.local,
-      address: eventData.venue.address.localized_address_display
-    });
-    localStorage.setItem(`plans_${user.email}`, JSON.stringify(saved));
-    alert("Event saved to your plans!");
+
+  saveEvent(eventData, btnRef);
+}
+
+export function saveEvent(eventData, btnRef) {
+  const user = getLoggedUser();
+  if (!user) return;
+
+  let saved = getSavedPlans(user.email);
+  saved.push({
+    id: Date.now(),
+    name: eventData.title || eventData.name || "Untitled",
+    date: eventData.date || new Date().toISOString(),
+    address: eventData.address || "Unknown location"
+  });
+
+  savePlans(user.email, saved);
+  showToast("Event saved to your plans!", "success");
+
+  if (btnRef) {
+    btnRef.disabled = true;
+    btnRef.textContent = "SAVED";
   }
-  
-  export function removePlan(id) {
-    const user = JSON.parse(localStorage.getItem("loggedUser"));
-    if (!user) return;
-  
-    let saved = JSON.parse(localStorage.getItem(`plans_${user.email}`)) || [];
-    saved = saved.filter(plan => plan.id !== id);
-    localStorage.setItem(`plans_${user.email}`, JSON.stringify(saved));
-    loadUserPlans();
+
+  setTimeout(() => {
+    window.location.href = "/plans.html";
+  }, 2500);
+}
+
+export function removePlan(id) {
+  const user = getLoggedUser();
+  if (!user) return;
+
+  if (!confirm("Are you sure you want to remove this plan?")) return;
+
+  let saved = getSavedPlans(user.email);
+  saved = saved.filter(plan => plan.id !== id);
+  savePlans(user.email, saved);
+  loadUserPlans();
+
+  showToast("Plan removed successfully.", "success");
+}
+
+export function loadUserPlans() {
+  const user = getLoggedUser();
+  const plansSection = document.getElementById("plans");
+  if (!user || !plansSection) return;
+
+  const saved = getSavedPlans(user.email);
+  if (saved.length === 0) {
+    plansSection.innerHTML = "No saved plans.";
+    return;
   }
-  
-  export function loadUserPlans() {
-    const user = JSON.parse(localStorage.getItem("loggedUser"));
-    const plansSection = document.getElementById("plans");
-    if (!user || !plansSection) return;
-  
-    const saved = JSON.parse(localStorage.getItem(`plans_${user.email}`)) || [];
-    if (saved.length === 0) {
-      plansSection.innerHTML = "<h3>No saved plans.</h3>";
-      return;
+
+  let html = `<h2>My Plans</h2>`;
+  saved.forEach(plan => {
+    html += `<div class='plan'>
+      <h4>${plan.name}</h4>
+      <p>${plan.address}</p>
+      <p>${plan.date} ${getDateBadge(plan.date)}</p>
+      <button onclick="removePlan(${plan.id})">Remove</button>   
+    </div>`;
+  });
+
+  plansSection.innerHTML = html;
+}
+
+function getDateBadge(dateStr) {
+  const today = new Date().toISOString().split("T")[0];
+  if (dateStr.includes(today)) {
+    return `<span class='badge today'>Today</span>`;
+  }
+  const eventDate = new Date(dateStr);
+  if (!isNaN(eventDate)) {
+    const daysDiff = Math.ceil((eventDate - new Date()) / (1000 * 60 * 60 * 24));
+    if (daysDiff > 0 && daysDiff <= 3) {
+      return `<span class='badge upcoming'>Upcoming</span>`;
     }
-  
-    let html = `<h2>My Plans</h2>`;
-    saved.forEach(plan => {
-      html += `<div class='plan'>
-        <h4>${plan.name}</h4>
-        <p>${plan.address}</p>
-        <p>${new Date(plan.date).toLocaleString()}</p>
-        <button onclick="removePlan(${plan.id})">Remove</button>
-      </div>`;
-    });
-  
-    plansSection.innerHTML = html;
   }
+  return "";
+}
+
+window.removePlan = removePlan;

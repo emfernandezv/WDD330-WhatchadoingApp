@@ -1,7 +1,7 @@
 // Main app logic (imports and setup)// main.mjs
-import { loginUser, logoutUser } from '/js/auth.mjs';
-import { searchEvents, showWeather } from '/js/dashboard.mjs';
-import { confirmSaveEvent, loadUserPlans } from '/js/plans-handler.mjs';
+import { loginUser, logoutUser } from './auth.mjs';
+import { searchEvents, showWeather } from './dashboard.mjs';
+import { confirmSaveEvent, loadUserPlans } from './plans-handler.mjs';
 
 const page = window.location.pathname;
 const user = JSON.parse(localStorage.getItem("loggedUser"));
