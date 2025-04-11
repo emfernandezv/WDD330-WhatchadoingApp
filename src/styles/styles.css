@@ -1,5 +1,6 @@
 /* styles.css */
 
+/* === COLOR VARIABLES === */
 :root {
   --bg: #fff8f0;
   --primary: #ff9966;
@@ -10,6 +11,7 @@
   --weather-bg: #e0cfc0;
 }
 
+/* === GLOBAL STYLES === */
 * {
   box-sizing: border-box;
 }
@@ -22,6 +24,12 @@ body {
   line-height: 1.6;
 }
 
+h2, h3, h4 {
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+/* === NAVIGATION === */
 nav {
   background-color: var(--primary);
   padding: 1rem;
@@ -40,6 +48,7 @@ nav a:hover {
   text-decoration: underline;
 }
 
+/* === HEADER === */
 header {
   background-color: var(--secondary);
   padding: 2rem;
@@ -54,12 +63,14 @@ header h1 {
   font-size: 2rem;
 }
 
+/* === LAYOUT CONTAINERS === */
 #app, main, section {
   max-width: 900px;
   margin: auto;
   padding: 1rem;
 }
 
+/* === FORM ELEMENTS === */
 input, button {
   padding: 0.75rem 1rem;
   margin: 0.5rem 0.3rem;
@@ -75,6 +86,7 @@ input {
   color: var(--text);
 }
 
+/* === BUTTONS === */
 button {
   background-color: var(--primary);
   color: white;
@@ -87,6 +99,7 @@ button:hover {
   background-color: var(--accent);
 }
 
+/* === EVENT CARD === */
 .event-item {
   background-color: var(--highlight);
   border-left: 5px solid var(--accent);
@@ -101,7 +114,9 @@ button:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+/* === WEATHER CARD === */
 .weather-card {
+  display: none;
   background-color: var(--weather-bg);
   border-left: 5px solid var(--accent);
   margin-top: 1rem;
@@ -120,16 +135,13 @@ button:hover {
   to { opacity: 1; transform: translateY(0); }
 }
 
-h2, h3, h4 {
-  color: var(--text);
-  margin-bottom: 0.5rem;
-}
-
+/* === LOGIN STATUS === */
 #login-status {
   color: red;
   font-weight: bold;
 }
 
+/* === TOAST NOTIFICATIONS === */
 .toast {
   position: fixed;
   bottom: 1rem;
@@ -159,4 +171,36 @@ h2, h3, h4 {
   10% { opacity: 1; transform: translateY(0) translateX(-50%); }
   90% { opacity: 1; transform: translateY(0) translateX(-50%); }
   100% { opacity: 0; transform: translateY(10px) translateX(-50%); }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+  nav {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .event-item, .weather-card {
+    padding: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  input, button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+
+  .toast {
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+  }
+  @keyframes fadeinout {
+    10% { opacity: 1; transform: translateY(0) translateX(-50%); }
+    90% { opacity: 1; transform: translateY(0) translateX(-50%); }
+    100% { opacity: 0; transform: translateY(10px) translateX(-50%); }
+  }
 }
