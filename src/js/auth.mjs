@@ -1,6 +1,7 @@
-// auth.mjs
 import { logoutUser, showToast } from "./utility.js";
 
+// Handles user login by checking credentials from users.json
+// If valid, stores user in localStorage and redirects to dashboard
 export async function loginUser() {
   const email = document.getElementById("username")?.value;
   const password = document.getElementById("password")?.value;
@@ -28,7 +29,8 @@ export async function loginUser() {
   }
 }
 
-
+// Registers a new user into localStorage (not persisted to users.json)
+// Logs them in immediately upon success
 export function registerUser(name, email, password) {
   const users = JSON.parse(localStorage.getItem("users")) || [];
   const exists = users.some(u => u.email === email);
@@ -46,6 +48,7 @@ export function registerUser(name, email, password) {
   setTimeout(() => window.location.href = "/index.html", 1000);
 }
 
+// Shows/hides logout button based on user login state and binds logout action
 const logoutBtn = document.getElementById("logoutBtn");
 if (logoutBtn) {
   const user = localStorage.getItem("loggedUser");
@@ -58,13 +61,12 @@ if (logoutBtn) {
   }
 }
 
-
+// Shows/hides login button based on user login state and binds login action
 const loginBtn = document.getElementById("login-btn");
 if (loginBtn) {
   const user = localStorage.getItem("loggedUser");
   if (user) loginBtn.style.display = "none";
   else loginBtn.addEventListener("click", loginUser);
 }
-
 
 export { logoutUser };

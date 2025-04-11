@@ -1,6 +1,7 @@
 // plans-handler.mjs
 import { showToast, getSavedPlans, savePlans, getLoggedUser } from "./utility.js";
 
+// Confirm event save; redirect to login if not authenticated
 export function confirmSaveEvent(eventData, btnRef) {
   const user = getLoggedUser();
   if (!user) {
@@ -24,6 +25,7 @@ export function confirmSaveEvent(eventData, btnRef) {
   saveEvent(eventData, btnRef);
 }
 
+// Save event data into localStorage plan list
 export function saveEvent(eventData, btnRef) {
   const user = getLoggedUser();
   if (!user) return;
@@ -49,6 +51,7 @@ export function saveEvent(eventData, btnRef) {
   }, 2500);
 }
 
+// Remove a saved plan by ID
 export function removePlan(id) {
   const user = getLoggedUser();
   if (!user) return;
@@ -63,6 +66,7 @@ export function removePlan(id) {
   showToast("Plan removed successfully.", "success");
 }
 
+// Load and display all user plans
 export function loadUserPlans() {
   const user = getLoggedUser();
   const plansSection = document.getElementById("plans");
@@ -80,13 +84,14 @@ export function loadUserPlans() {
       <h4>${plan.name}</h4>
       <p>${plan.address}</p>
       <p>${plan.date} ${getDateBadge(plan.date)}</p>
-      <button onclick="removePlan(${plan.id})">Remove</button>   
+      <button onclick="removePlan(${plan.id})">Remove</button>
     </div>`;
   });
 
   plansSection.innerHTML = html;
 }
 
+// Display a badge for today or upcoming events
 function getDateBadge(dateStr) {
   const today = new Date().toISOString().split("T")[0];
   if (dateStr.includes(today)) {
@@ -102,4 +107,5 @@ function getDateBadge(dateStr) {
   return "";
 }
 
+// Allow plan removal via global scope (used in inline HTML handlers)
 window.removePlan = removePlan;

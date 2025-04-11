@@ -1,9 +1,11 @@
-// dashboard.mjs (Google Events API via SerpAPI with skeleton loading)
+// Searches for events in a given location using SerpAPI
+// Displays skeletons during load and renders event results
 export async function searchEvents() {
   const location = document.getElementById("location").value;
   const eventsContainer = document.getElementById("events");
   eventsContainer.innerHTML = `<h2>Searching for events in ${location}...</h2>`;
 
+  // Show 3 skeleton cards as placeholders
   for (let i = 0; i < 3; i++) {
     const skeleton = document.createElement("div");
     skeleton.className = "event-item skeleton";
@@ -16,7 +18,7 @@ export async function searchEvents() {
     eventsContainer.appendChild(skeleton);
   }
 
-  const apiKey = "40fa1e69c40a2e6239786d38228f08355d1f9ff861e60ed33a2d66092781efdd";
+  const apiKey = import.meta.env.VITE_SERAPI_TOKEN;
   const url = `/serpapi/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
 
   try {
@@ -28,6 +30,7 @@ export async function searchEvents() {
       return;
     }
 
+    // Render found events
     eventsContainer.innerHTML = "<h2>Events Found:</h2>";
     data.events_results.forEach((event, index) => {
       const eventEl = document.createElement("div");
@@ -38,13 +41,14 @@ export async function searchEvents() {
       const dateTime = date?.when || "";
       const weatherId = `weather-${index}`;
 
+      // Build event HTML with buttons
       eventEl.innerHTML = `
         <h3>${title}</h3>
         <p>${locationName}</p>
         <p>${dateTime}</p>
         <button onclick="showWeather('${locationName}', '${dateTime}', '${weatherId}', this)">Check Weather</button>
-       <button onclick='confirmSaveEvent(${JSON.stringify({ title, address: locationName, date: dateTime })}, this)'>Save Event</button>
-              <div id="${weatherId}" class="weather-card"></div>
+        <button onclick='confirmSaveEvent(${JSON.stringify({ title, address: locationName, date: dateTime })})'>Save Event</button>
+        <div id="${weatherId}" class="weather-card"></div>
       `;
       eventsContainer.appendChild(eventEl);
     });
@@ -54,10 +58,13 @@ export async function searchEvents() {
   }
 }
 
+// Fetches and displays weather info for a given location and date
+// Shows or hides weather data in a collapsible card
 export async function showWeather(eventLocation, eventDate, containerId, btnRef) {
   const allCards = document.querySelectorAll(".weather-card");
   const allButtons = document.querySelectorAll("button");
 
+  // Collapse any previously expanded forecast cards
   allCards.forEach(card => {
     if (card.id !== containerId) {
       card.classList.remove("active");
@@ -73,6 +80,7 @@ export async function showWeather(eventLocation, eventDate, containerId, btnRef)
   const container = document.getElementById(containerId);
   if (!container) return;
 
+  // Toggle visibility of weather card
   if (container.classList.contains("active")) {
     container.classList.remove("active");
     container.innerHTML = "";
@@ -84,7 +92,7 @@ export async function showWeather(eventLocation, eventDate, containerId, btnRef)
   container.classList.add("active");
   container.innerHTML = `<p>Loading weather for ${eventLocation} on ${eventDate}...</p>`;
 
-  const apiKey = "3484785263346070b831c5d446a35784";
+  const apiKey = import.meta.env.VITE_OPENWEATHER_TOKEN;
   const cleanLocation = eventLocation.split(",")[0].trim();
   const geoUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(cleanLocation)}&limit=1&appid=${apiKey}`;
 
@@ -106,6 +114,7 @@ export async function showWeather(eventLocation, eventDate, containerId, btnRef)
       return;
     }
 
+    // Render weather details
     container.innerHTML = `
       <h4>Weather Forecast</h4>
       <p><img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="${data.weather[0].description}" style="vertical-align:middle;"> ${data.weather[0].description}</p>
