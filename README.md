@@ -78,7 +78,7 @@ This app is built using **HTML**, **CSS**, and **vanilla JavaScript**, and integ
 ### Steps
 1. Clone the repository
 ```bash
-git clone https://github.com/emfernandezv/WDD330-SleepOutside
+git clone htthttps://github.com/emfernandezv/WDD330-WhatchadoingApp
 cd whatchadoing
 ```
 
