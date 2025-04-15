@@ -4,7 +4,7 @@ export default {
     build: {
       outDir: "../dist",
       emptyOutDir: true
-    },
+    }/*,
     server: {
       port: 5173,
       proxy: {
@@ -14,6 +14,6 @@ export default {
           rewrite: path => path.replace(/^\/serpapi/, "")
         }
       }
-    }
+    }*/
   };
   

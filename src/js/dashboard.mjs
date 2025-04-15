@@ -19,7 +19,8 @@ export async function searchEvents() {
   }
 
   const apiKey = import.meta.env.VITE_SERAPI_TOKEN;
-  const url = `/serpapi/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
+  //const url = `/serpapi/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
+  const url = `https://serpapi.com/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
 
   try {
     const res = await fetch(url);
