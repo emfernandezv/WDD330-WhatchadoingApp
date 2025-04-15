@@ -21,7 +21,7 @@ export async function searchEvents() {
   // Fetch events from SerpAPI
   const apiKey = import.meta.env.VITE_SERAPI_TOKEN;
   //const url = `/serpapi/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
-  const url = 'https://cors-proxy.htmldriven.com/?url=' + `https://serpapi.com/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`
+  const url = 'https://thingproxy.freeboard.io/fetch/' + `https://serpapi.com/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`
 
   try {
     const res = await fetch(url);
