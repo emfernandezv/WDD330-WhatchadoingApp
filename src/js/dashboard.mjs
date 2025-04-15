@@ -18,9 +18,14 @@ export async function searchEvents() {
     eventsContainer.appendChild(skeleton);
   }
 
+  const proxyKey= "temp_c6df1ba2a061060e480e05412b91d785";
+
+  
+
+
   const apiKey = import.meta.env.VITE_SERAPI_TOKEN;
   //const url = `/serpapi/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
-  const url = 'https://corsproxy.io/' + encodeURIComponent(`https://serpapi.com/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`);
+  const url = 'https://corsproxy.io/' + `https://serpapi.com/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
 
   try {
     const res = await fetch(url);
