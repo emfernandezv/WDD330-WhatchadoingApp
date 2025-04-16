@@ -19,11 +19,12 @@ export async function searchEvents() {
   }
 
   // Fetch events from SerpAPI
-  const apiKey = import.meta.env.VITE_SERAPI_TOKEN;
-  //const url = `/serpapi/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
-  const url = 'https://api.allorigins.win/get?url=' + encodeURIComponent(`https://serpapi.com/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`);
+ 
 
   try {
+  const apiKey = import.meta.env.VITE_SERAPI_TOKEN;
+  const url = `/serpapi/search.json?engine=google_events&q=events+in+${encodeURIComponent(location)}&api_key=${apiKey}`;
+  
     const res = await fetch(url);
     const data = await res.json();
     console.log(data);
@@ -58,6 +59,42 @@ export async function searchEvents() {
     eventsContainer.innerHTML = "<p>Error fetching events.</p>";
     console.error("SerpAPI error:", err);
   }
+    /*const apiKey = "apMfQ80AAeYkehOSxopwPu0VVeCzVwow";
+    const url = `https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apiKey}&city=${encodeURIComponent(`[${location}]`)}&size=10`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      const events = data._embedded?.events || [];
+  
+      if (events.length === 0) {
+        eventsContainer.innerHTML = "<p>No events found.</p>";
+        return;
+      }
+  
+      eventsContainer.innerHTML = "<h2>Events Found:</h2>";
+      events.forEach((event, index) => {
+        const eventEl = document.createElement("div");
+        eventEl.className = "event-item";
+  
+        const title = event.name;
+        const address = event._embedded?.venues[0]?.address?.line1 || "Unknown location";
+        const dateTime = event.dates?.start?.localDate || "";
+        const weatherId = `weather-${index}`;
+  
+        eventEl.innerHTML = `
+          <h3>${title}</h3>
+          <p>${address}</p>
+          <p>${dateTime}</p>
+          <button onclick="showWeather('${address}', '${dateTime}', '${weatherId}', this)">Check Weather</button>
+          <button onclick='confirmSaveEvent(${JSON.stringify({ title, address, date: dateTime })})'>Save Event</button>
+          <div id="${weatherId}" class="weather-card"></div>
+        `;
+        eventsContainer.appendChild(eventEl);
+      });
+    } catch (err) {
+      eventsContainer.innerHTML = "<p>Error fetching events.</p>";
+      console.error("Ticketmaster API error:", err);
+    }*/
 }
 
 // Fetches and displays weather info for a given location and date
